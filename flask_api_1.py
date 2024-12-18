@@ -11,13 +11,18 @@ print("Model loaded successfully!")
 
 @app.route('/')
 def home():
-    return jsonify({"message": "Welcome to the Sentence Transformer API!"}), 200
+    return jsonify(
+        {"message": "Welcome to the Sentence Transformer API!"}
+    ), 200
 
 
 @app.route('/predict', methods=['POST', 'GET'])
 def predict():
     if request.method == 'GET':
-        return jsonify({"message": "This endpoint only supports POST requests. Please send a POST request with a JSON body."}), 405
+        return jsonify(
+            {"message": "This endpoint only supports POST requests. "
+                        "Please send a POST request with a JSON body."}
+        ), 405
 
     try:
         # Get JSON data from the request
@@ -28,14 +33,19 @@ def predict():
         product_descriptions = data.get('product_descriptions', [])
 
         if not query or not product_descriptions:
-            return jsonify({"error": "Both 'query' and 'product_descriptions' must be provided."}), 400
+            return jsonify(
+                {"error": "Both 'query' and 'product_descriptions' must "
+                          "be provided."}
+            ), 400
 
         # Embed query and product descriptions
         query_embedding = model.encode(query)
         product_embeddings = model.encode(product_descriptions)
 
         # Perform semantic search
-        hits = util.semantic_search(query_embedding, product_embeddings, top_k=2)
+        hits = util.semantic_search(
+            query_embedding, product_embeddings, top_k=2
+        )
 
         # Format results
         results = [
