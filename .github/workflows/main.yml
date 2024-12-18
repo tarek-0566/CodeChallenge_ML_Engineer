@@ -1,6 +1,5 @@
 name: CI/CD Pipeline
 
-# Trigger on pushes and pull requests to the main branch
 on:
   push:
     branches:
@@ -14,47 +13,44 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout the code
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    # Step 2: Set up Python
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.9
+      # Step 2: Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
 
-    # Step 3: Install dependencies
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    # Step 4: Linting and Code Quality
-    - name: Run flake8
-      run: flake8 .
+      # Step 4: Linting with flake8
+      - name: Run flake8 for linting
+        run: |
+          pip install flake8
+          flake8 app.py
 
-    # Step 5: Run Unit and Integration Tests
-    - name: Run tests with pytest
-      run: pytest
+      # Step 5: Run tests with pytest
+      - name: Run pytest for unit and integration tests
+        run: |
+          pip install pytest
+          pytest tests/
 
-    # Step 6: Build Docker Image
-    - name: Build Docker image
-      run: docker build -t flask-sentence-transformer .
+      # Step 6: Build Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t flask-sentence-transformer .
 
-    # Step 7: Run Docker Container and Test
-    - name: Run Docker container
-      run: |
-        docker run -d -p 8000:8000 --name api-test flask-sentence-transformer
-        sleep 10  # Allow the container to start up
-
-    # Step 8: Validate Deployment
-    - name: Validate API health check
-      run: |
-        curl http://localhost:8000/health
-
-    # Step 9: Cleanup Docker Resources
-    - name: Cleanup Docker resources
-      run: |
-        docker stop api-test
-        docker rm api-test
+      # Step 7: Validate the Docker container
+      - name: Run and test Docker container
+        run: |
+          docker run -d -p 8000:8000 --name flask-container flask-sentence-transformer
+          sleep 5  # Wait for the container to start
+          curl http://localhost:8000/health
+          docker stop flask-container
+          docker rm flask-container
