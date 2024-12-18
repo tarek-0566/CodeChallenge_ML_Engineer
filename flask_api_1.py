@@ -1,9 +1,5 @@
-import os
 from flask import Flask, request, jsonify
 from sentence_transformers import SentenceTransformer, util
-
-# # Fetch the token from environment variables
-# hf_token = os.getenv("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")
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -12,9 +8,11 @@ app = Flask(__name__)
 model = SentenceTransformer("./models/instructor-base")
 print("Model loaded successfully!")
 
+
 @app.route('/')
 def home():
     return jsonify({"message": "Welcome to the Sentence Transformer API!"}), 200
+
 
 @app.route('/predict', methods=['POST', 'GET'])
 def predict():
@@ -40,12 +38,13 @@ def predict():
         hits = util.semantic_search(query_embedding, product_embeddings, top_k=2)
 
         # Format results
-        results = []
-        for hit in hits[0]:
-            results.append({
+        results = [
+            {
                 "product_description": product_descriptions[hit['corpus_id']],
                 "score": round(hit['score'], 4)
-            })
+            }
+            for hit in hits[0]
+        ]
 
         return jsonify({"query": query, "results": results}), 200
 
@@ -56,6 +55,7 @@ def predict():
 @app.route('/health', methods=['GET'])
 def health_check():
     return jsonify({"status": "healthy"}), 200
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000)
