@@ -1,58 +1,141 @@
-# Take home assignment
+# CodeChallenge: Machine Learning Engineer
 
-Welcome to the nexmart take home assignment for the Machine Learning Engineer (with MLOps) role.
+## Project Overview
+This project implements a Machine Learning solution for **product similarity matching** using Sentence Transformers. The goal is to find the most similar product descriptions for a given query. The project includes:
+- A REST API for serving predictions.
+- Containerization using Docker.
+- CI/CD setup with GitHub Actions.
+- A monitoring plan for deployed models using Prometheus + Grafana, Evidently AI, and Docker monitoring tools.
 
-nexMart as a company enables the digitalisation of the hardware and industrial supply sector by providing a comprehensive range of data services. To do so, a lot of external input data from producers and wholesalers needs to be ingested, transformed and delivered. One process step in this chain of operations is to handle the variety of formats and contents.
+---
 
-As the second step in the interview process, we kindly ask you to take on a coding assignment plus some related questions and submit it to us. 
-For this, you will use a basic open source encoder referenced in the repo's embedding_use_case_example.py file. The model's task is to compare product descriptions with any given amount of queries, e.g. to find similar products and return the best suiting product descriptions. You can find out more about the model under this website: https://sbert.net/.
-Your task is to deploy this model via a REST API, creating a CI/CD pipeline as well as taking care of the consequently occuring operational work. 
-With this, we are looking to test your ability of 
-1) deploying a machine learning model using containerization and
-2) automating this deployment process using CI/CD (omit any orchestration for the exercise).
-3) creating a plan for monitoring the model once it is deployed.
+## Features
+1. **Model Serving**:
+   - REST API implemented with Flask to serve predictions using Sentence Transformers.
+   - Supports semantic similarity search for product descriptions.
 
-## Instructions:
+2. **Containerization**:
+   - Dockerized API for portability and consistent deployment.
 
-- Create your own private project repo on GitHub to submit your solution once ready.
-- Check out the embedding_use_case_example.py for how we imagine to use the model and inform yourself about the model.
-- Containerize the model provided using Docker and create a working REST API for serving predictions.
-- Set up a basic CI/CD pipeline that automatically builds and tests the model deployment.
-- Write a brief explanation of what metrics you would track for the deployed model, why they are important, and how you would implement monitoring.
-- Create any other files mentioned in the delivery expectation.
-- Once you are satisfied with your solution, please give the nxcodingassignment GitHub user access to your repo and notify us (email below) about the submission.
+3. **CI/CD**:
+   - Automated pipeline with GitHub Actions to lint, test, and build Docker images.
 
+4. **Monitoring**:
+   - System metrics like latency, errors, and resource usage tracked using Prometheus + Grafana.
+   - Model performance metrics (e.g., data drift) tracked using Evidently AI.
+   - Docker container resource usage monitored with cAdvisor.
 
-## Tools Required:
+---
 
-- API: Python code & packages for API creation.
-- Docker: For containerizing the model API.
-- CI/CD Tool: OS tool like GitHub Actions or GitLab CI.
-  
+## Technologies Used
+- **Programming Language**: Python 3.9
+- **Libraries**:
+  - `sentence-transformers` for model inference.
+  - `Flask` for API creation.
+  - `Docker` for containerization.
+- **Monitoring Tools**:
+  - Prometheus + Grafana
+  - Evidently AI
+  - Docker monitoring tools (cAdvisor)
+- **CI/CD**: GitHub Actions
 
-## Delivery expectations:
+---
 
-1) Model Deployment (Containerization):
-- A working Dockerfile (and optionally docker-compose files) for containerizing the model API.
-- Source code for serving the model via the API and any tests you deem necessary.
+## Setup Instructions
 
-2) CI/CD Setup:
-- a CI/CD pipeline configuration (e.g., .github/workflows/ or .gitlab-ci.yml).
+### Clone the Repository
+```bash
+git clone https://github.com/tarek-0566/CodeChallenge_ML_Engineer.git
+cd CodeChallenge_ML_Engineer
 
-3) Monitoring Plan:
-- A clear & concise document that describes your monitoring strategy.
+### Create a Virtual Environment
+```bash
+python -m venv myenv
+source myenv/bin/activate    # On Windows: myenv\Scripts\activate
 
-4) A README of the solution submitted with
-   
-   a. instructions on how to build & run your solution locally.
-   
-   b. any API & CI/CD pipeline documentation you deem useful.
-   
-   c. a few explanations on which additional code you could have written to make it a full-scale production setup with a model repository containing various model versions.
-   
-   d. anything else that you would like to let us know with regards to the assignment like explanations, additional info etc if any. (not mandatory)
+### Install Dependencies
+```bash
+pip install -r requirements.txt
 
+## Usage
+1. Start the Flask server locally
+```bash
+python app.py
+2. Access the endpoints:
+Health Check: http://localhost:8000/health
+Prediction: http://localhost:8000/predict
 
-Generally, as this is a selection process exercise, we do not not expect a full-blown solution to save the candidate’s time. That being said, it is important for us to see notions to evaluate the seniority of the candidate which means we expect code in basic production quality (not MVP standard) and minimal testing that your code works & checking the most important aspects of the task. Evaluation criteria include the compliance with the delivery expectations, logical thinking, code and documentation quality.
+### Example Prediction Request
+```bash
+curl -X POST -H "Content-Type: application/json" -d '{
+    "query": ["What can I use to cut wood?"],
+    "product_descriptions": [
+        "Heavy-duty claw hammer with a non-slip grip handle.",
+        "High-performance circular saw with laser guide."
+    ]
+}' http://localhost:8000/predict
 
-Any technical questions regarding the assignment can be submitted to this email address: coding.assignment@nexmart.com. For all other questions, please refer to your recruiter contact.
+### Run with Docker
+1. Build the Docker image: 
+```bash
+docker build -t flask-sentence-transformer .
+2. Run the container:
+```bash
+docker run -p 8000:8000 flask-sentence-transformer
+3. Test the API:
+ - Use the /health endpoint to ensure the service is running.
+ - Send requests to /predict for predictions.
+
+CI/CD Pipeline
+The CI/CD pipeline:
+
+- Runs on all pushes and pull requests to the main branch.
+- Steps include:
+ - Linting (flake8).
+ - Unit and integration tests (pytest).
+ - Docker image build and validation.
+ - To verify the pipeline, check the Actions tab in the GitHub repository.
+
+### Monitoring
+1. System Metrics (Prometheus + Grafana):
+
+- API Latency
+- Error Rate
+- Request Volume
+- Resource Usage (CPU, Memory)
+Setup:
+
+- Install and configure Prometheus to scrape metrics from the Flask API.
+- Use Grafana to visualize metrics with dashboards.
+- Model Metrics (Evidently AI):
+
+- Input Data Drift
+- Similarity Score Trends
+Setup:
+
+- Use Evidently AI to monitor and compare the current input data distribution with the training data.
+## Docker Monitoring (cAdvisor):
+
+Track CPU, memory, and network usage of the Docker container.
+Setup:
+
+- Install and run cAdvisor alongside the Docker container to collect resource usage statistics.
+
+Folder Structure
+```bash
+CodeChallenge_ML_Engineer/
+├── flask_api_1.py          # Flask API implementation
+├── requirements.txt       # Python dependencies
+├── Dockerfile             # Docker configuration
+├── .github/
+│   └── workflows/
+│       └── main.yml       # CI/CD pipeline
+├── monitoring_plan.md     # Monitoring plan documentation
+├── tests/                 # Unit and integration tests
+└── README.md              # Project documentation
+
+### Future Enhancements
+- Model versioning using tools like DVC.
+- Autoscaling the API using Kubernetes or Docker Swarm.
+- Advanced alerting with Prometheus AlertManager.
+
