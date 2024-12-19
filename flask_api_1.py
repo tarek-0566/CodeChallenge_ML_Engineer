@@ -40,13 +40,15 @@ def predict():
     # Validate inputs
     if not queries or not product_descriptions:
         return jsonify(
-            {"error": "Both 'query' and 'product_descriptions' must be provided."}
+            {"error": "'query' and 'product_descriptions' must be provided."}
         ), 400
 
     # Validate types
-    if not isinstance(queries, list) or not isinstance(product_descriptions, list):
+    if not isinstance(queries, list) \
+    or not isinstance(product_descriptions, list):
         return jsonify(
-            {"error": "'queries' and 'product_descriptions' must be lists."}
+            {"error": "'query' and 'product_descriptions' \
+             must be lists."}
         ), 400
 
     # Encode queries and product descriptions
