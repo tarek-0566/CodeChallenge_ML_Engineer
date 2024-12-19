@@ -5,8 +5,8 @@ from sentence_transformers import SentenceTransformer, util
 app = Flask(__name__)
 
 # Load the SentenceTransformer model
-model = SentenceTransformer("./models/instructor-base")
-# model = SentenceTransformer("hkunlp/instructor-base")
+# model = SentenceTransformer("./models/instructor-base")
+model = SentenceTransformer("hkunlp/instructor-base")
 print("Model loaded successfully!")
 
 
