@@ -33,7 +33,9 @@ def predict():
 
     # Encode queries and product descriptions
     query_embeddings = model.encode(queries, convert_to_tensor=True)
-    product_embeddings = model.encode(product_descriptions, convert_to_tensor=True)
+    product_embeddings = model.encode(
+        product_descriptions, convert_to_tensor=True
+    )
 
     # Compute cosine similarities
     hits = util.semantic_search(query_embeddings, product_embeddings)
