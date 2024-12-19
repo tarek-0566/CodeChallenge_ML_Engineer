@@ -38,9 +38,18 @@ def predict():
     product_descriptions = data.get('product_descriptions', [])
 
     # Validate inputs
-    if not queries or not product_descriptions:
+# Validate types
+    if (
+        not isinstance(queries, list)
+        or not isinstance(product_descriptions, list)
+    ):
         return jsonify(
-            {"error": "'query' and 'product_descriptions' must be provided."}
+            {
+                "error": (
+                    "'queries' and 'product_descriptions' must be provided "
+                    "as lists."
+                )
+            }
         ), 400
 
     # Validate types
