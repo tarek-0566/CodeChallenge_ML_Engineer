@@ -47,23 +47,32 @@ This project implements a Machine Learning solution for **product similarity mat
 ```bash
 git clone https://github.com/tarek-0566/CodeChallenge_ML_Engineer.git
 cd CodeChallenge_ML_Engineer
+```
 
-### Create a Virtual Environment
+### Setting Up a Virtual Environment
+
+To create and activate a virtual environment, follow these steps:
+
 ```bash
 python -m venv myenv
 source myenv/bin/activate    # On Windows: myenv\Scripts\activate
+```
 
 ### Install Dependencies
 ```bash
 pip install -r requirements.txt
+```
 
 ## Usage
-1. Start the Flask server locally
+
+### Start the Flask Server Locally
 ```bash
 python app.py
-2. Access the endpoints:
-Health Check: http://localhost:8000/health
-Prediction: http://localhost:8000/predict
+```
+
+### Access the Endpoints
+- **Health Check**: [http://localhost:8000/health](http://localhost:8000/health)
+- **Prediction**: [http://localhost:8000/predict](http://localhost:8000/predict)
 
 ### Example Prediction Request
 ```bash
@@ -74,54 +83,66 @@ curl -X POST -H "Content-Type: application/json" -d '{
         "High-performance circular saw with laser guide."
     ]
 }' http://localhost:8000/predict
+```
 
-### Run with Docker
-1. Build the Docker image: 
+## Run with Docker
+
+### Build the Docker Image
 ```bash
 docker build -t flask-sentence-transformer .
-2. Run the container:
+```
+
+### Run the Container
 ```bash
 docker run -p 8000:8000 flask-sentence-transformer
-3. Test the API:
- - Use the /health endpoint to ensure the service is running.
- - Send requests to /predict for predictions.
+```
 
-CI/CD Pipeline
-The CI/CD pipeline:
+### Test the API
+- Use the `/health` endpoint to ensure the service is running.
+- Send requests to `/predict` for predictions.
 
-- Runs on all pushes and pull requests to the main branch.
-- Steps include:
- - Linting (flake8).
- - Unit and integration tests (pytest).
- - Docker image build and validation.
- - To verify the pipeline, check the Actions tab in the GitHub repository.
+## CI/CD Pipeline
 
-### Monitoring
-1. System Metrics (Prometheus + Grafana):
+The CI/CD pipeline runs on all pushes and pull requests to the main branch and includes the following steps:
 
+1. **Linting**: Code quality checks using `flake8`.
+2. **Unit and Integration Tests**: Tests executed with `pytest`.
+3. **Docker Image Build and Validation**: Ensures the Docker image is correctly built.
+
+### Checking the Pipeline
+- Navigate to the **Actions** tab in the GitHub repository to verify pipeline runs.
+
+## Monitoring
+
+### System Metrics (Prometheus + Grafana)
+
+Key metrics:
 - API Latency
 - Error Rate
 - Request Volume
 - Resource Usage (CPU, Memory)
-Setup:
 
-- Install and configure Prometheus to scrape metrics from the Flask API.
-- Use Grafana to visualize metrics with dashboards.
-- Model Metrics (Evidently AI):
+#### Setup:
+1. Install and configure Prometheus to scrape metrics from the Flask API.
+2. Use Grafana to visualize metrics with pre-built dashboards.
 
+### Model Metrics (Evidently AI)
+
+Key metrics:
 - Input Data Drift
 - Similarity Score Trends
-Setup:
 
-- Use Evidently AI to monitor and compare the current input data distribution with the training data.
-## Docker Monitoring (cAdvisor):
+#### Setup:
+1. Use Evidently AI to monitor and compare the current input data distribution with the training data.
+
+### Docker Monitoring (cAdvisor)
 
 Track CPU, memory, and network usage of the Docker container.
-Setup:
 
-- Install and run cAdvisor alongside the Docker container to collect resource usage statistics.
+#### Setup:
+1. Install and run cAdvisor alongside the Docker container to collect resource usage statistics.
 
-Folder Structure
+## Folder Structure
 ```bash
 CodeChallenge_ML_Engineer/
 ├── flask_api_1.py          # Flask API implementation
@@ -133,9 +154,12 @@ CodeChallenge_ML_Engineer/
 ├── monitoring_plan.md     # Monitoring plan documentation
 ├── tests/                 # Unit and integration tests
 └── README.md              # Project documentation
+```
 
-### Future Enhancements
-- Model versioning using tools like DVC.
-- Autoscaling the API using Kubernetes or Docker Swarm.
-- Advanced alerting with Prometheus AlertManager.
+## Future Enhancements
+
+1. **Model Versioning**: Implement version control for the model using tools like DVC.
+2. **Autoscaling**: Use Kubernetes or Docker Swarm to scale the API dynamically based on load.
+3. **Advanced Alerting**: Configure Prometheus AlertManager for proactive notifications based on predefined thresholds.
+
 
