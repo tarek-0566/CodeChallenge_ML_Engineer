@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from sentence_transformers import SentenceTransformer, util
 
+
 # Initialize Flask app
 app = Flask(__name__)
 
@@ -8,6 +9,7 @@ app = Flask(__name__)
 # model = SentenceTransformer("./models/instructor-base")
 model = SentenceTransformer("hkunlp/instructor-base")
 print("Model loaded successfully!")
+
 
 @app.route('/')
 def home():
@@ -23,7 +25,9 @@ def health():
 
 @app.errorhandler(405)
 def method_not_allowed(e):
-    return jsonify({"message": "This endpoint only supports POST requests"}), 405
+    return jsonify(
+        {"message": "This endpoint only supports POST requests"}
+    ), 405
 
 
 @app.route('/predict', methods=['POST'])
@@ -59,7 +63,7 @@ def predict():
             {
                 "query": queries[idx],
                 "product_description": product_descriptions[hit['corpus_id']],
-                "score": round(hit['score'], 4)
+                "score": round(hit['score'], 4),
             }
             for hit in hit_group
         ]
