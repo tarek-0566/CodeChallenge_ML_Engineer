@@ -1,10 +1,10 @@
 from sentence_transformers import SentenceTransformer, util
 
 #load model
-model = SentenceTransformer("hkunlp/instructor-base")
+model = SentenceTransformer("./models/instructor-base")
 
 # example query
-query = ["What can I use to cut wood?"]
+query = ["What can I use to cut wood?", "Tell me something to measure length."]
 
 # example product descriptions
 product_descriptions = [
@@ -22,8 +22,18 @@ product_embeddings = model.encode(product_descriptions)
 # perform cosine similarity search
 hits = util.semantic_search(query_embedding, product_embeddings, top_k=2)
 
-# example result
-print(f"Query: {query}")
-for hit in hits[i]:
-  print(f"  {corpus[hit['corpus_id']]} (Score: {round(hit['score'], 4)})")
-  
+# # example result
+# print(f"Query: {query}")
+# for hit in hits[i]:
+#   print(f"  {corpus[hit['corpus_id']]} (Score: {round(hit['score'], 4)})")
+
+# New for loop to print all hits
+for hit in hits:
+    results = [
+        {
+            "product_description": product_descriptions[hit['corpus_id']],
+            "score": round(hit['score'], 4)
+        }
+        for hit in hit
+    ]
+    print(results)

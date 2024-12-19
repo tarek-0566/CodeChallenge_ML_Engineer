@@ -9,64 +9,44 @@ app = Flask(__name__)
 model = SentenceTransformer("hkunlp/instructor-base")
 print("Model loaded successfully!")
 
-
 @app.route('/')
 def home():
     return jsonify(
         {"message": "Welcome to the Sentence Transformer API!"}
     ), 200
 
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({"status": "healthy"}), 200
 
-@app.route('/predict', methods=['POST', 'GET'])
+@app.route('/predict', methods=['POST'])
 def predict():
-    if request.method == 'GET':
-        return jsonify(
-            {"message": "This endpoint only supports POST requests. "
-                        "Please send a POST request with a JSON body."}
-        ), 405
+    data = request.get_json()
+    queries = data.get('queries', [])
+    product_descriptions = data.get('product_descriptions', [])
 
-    try:
-        # Get JSON data from the request
-        data = request.get_json()
+    if not queries or not product_descriptions:
+        return jsonify({"error": "Queries and product descriptions are required"}), 400
 
-        # Extract query and product descriptions
-        query = data.get('query', [])
-        product_descriptions = data.get('product_descriptions', [])
+    # Encode queries and product descriptions
+    query_embeddings = model.encode(queries, convert_to_tensor=True)
+    product_embeddings = model.encode(product_descriptions, convert_to_tensor=True)
 
-        if not query or not product_descriptions:
-            return jsonify(
-                {"error": "Both 'query' and 'product_descriptions' must "
-                          "be provided."}
-            ), 400
+    # Compute cosine similarities
+    hits = util.semantic_search(query_embeddings, product_embeddings)
 
-        # Embed query and product descriptions
-        query_embedding = model.encode(query)
-        product_embeddings = model.encode(product_descriptions)
-
-        # Perform semantic search
-        hits = util.semantic_search(
-            query_embedding, product_embeddings, top_k=2
-        )
-
-        # Format results
-        results = [
+    results = []
+    for hit_group in hits:
+        result = [
             {
                 "product_description": product_descriptions[hit['corpus_id']],
                 "score": round(hit['score'], 4)
             }
-            for hit in hits[0]
+            for hit in hit_group
         ]
+        results.append(result)
 
-        return jsonify({"query": query, "results": results}), 200
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-@app.route('/health', methods=['GET'])
-def health_check():
-    return jsonify({"status": "healthy"}), 200
-
+    return jsonify(results), 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000)
