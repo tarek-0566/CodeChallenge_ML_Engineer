@@ -41,16 +41,45 @@ jobs:
           pip install pytest
           pytest tests/
 
-      # Step 6: Build Docker image
+      # Step 6: Set up Docker
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
+      # Step 7: Build Docker image
       - name: Build Docker image
         run: |
           docker build -t flask-sentence-transformer .
 
-      # Step 7: Validate the Docker container
+      # Step 8: Run and validate Docker container
       - name: Run and test Docker container
         run: |
+          # Stop and remove any existing container
+          if docker ps -a --format '{{.Names}}' | grep -q "flask-container"; then
+            docker stop flask-container
+            docker rm flask-container
+          fi
+
+          # Run the container
           docker run -d -p 8000:8000 --name flask-container flask-sentence-transformer
-          sleep 5  # Wait for the container to start
-          curl http://localhost:8000/health
+
+          # Wait for the container to initialize
+          sleep 30
+
+          # Check container status
+          docker ps
+
+          # Test the health endpoint
+          curl http://localhost:8000/health || {
+            echo "Health check failed. Checking logs...";
+            docker logs flask-container;
+            exit 1;
+          }
+
+          # Cleanup
           docker stop flask-container
           docker rm flask-container
+
+      # Optional: Cleanup dangling Docker images and containers
+      - name: Cleanup Docker
+        run: |
+          docker system prune -f
