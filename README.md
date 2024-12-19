@@ -67,7 +67,7 @@ pip install -r requirements.txt
 
 ### Start the Flask Server Locally
 ```bash
-python app.py
+python flask_api_1.py
 ```
 
 ### Access the Endpoints
