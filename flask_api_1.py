@@ -29,7 +29,9 @@ def predict():
     product_descriptions = data.get('product_descriptions', [])
 
     if not queries or not product_descriptions:
-        return jsonify({"error": "Queries and product descriptions are required"}), 400
+        return jsonify(
+            {"error": "Queries and product descriptions are required"}
+        ), 400
 
     # Encode queries and product descriptions
     query_embeddings = model.encode(queries, convert_to_tensor=True)
