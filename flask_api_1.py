@@ -5,9 +5,10 @@ from sentence_transformers import SentenceTransformer, util
 app = Flask(__name__)
 
 # Load the SentenceTransformer model
-# model = SentenceTransformer("./models/instructor-base")
-model = SentenceTransformer("hkunlp/instructor-base")
+model = SentenceTransformer("./models/instructor-base")
+# model = SentenceTransformer("hkunlp/instructor-base")
 print("Model loaded successfully!")
+
 
 @app.route('/')
 def home():
@@ -15,9 +16,11 @@ def home():
         {"message": "Welcome to the Sentence Transformer API!"}
     ), 200
 
+
 @app.route('/health', methods=['GET'])
 def health():
     return jsonify({"status": "healthy"}), 200
+
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -47,6 +50,7 @@ def predict():
         results.append(result)
 
     return jsonify(results), 200
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000)
