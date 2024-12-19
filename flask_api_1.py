@@ -44,8 +44,7 @@ def predict():
         ), 400
 
     # Validate types
-    if not isinstance(queries, list) \
-    or not isinstance(product_descriptions, list):
+    if not isinstance(queries, list) or not isinstance(product_descriptions, list):
         return jsonify(
             {"error": "'query' and 'product_descriptions' \
              must be lists."}
