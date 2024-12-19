@@ -50,11 +50,20 @@ def predict():
         ), 400
 
     # Encode queries and product descriptions
-    query_embeddings = model.encode(queries, convert_to_tensor=True)
-    product_embeddings = model.encode(product_descriptions, convert_to_tensor=True)
+    query_embeddings = model.encode(
+        queries, 
+        convert_to_tensor=True
+    )
+    product_embeddings = model.encode(
+        product_descriptions, 
+        convert_to_tensor=True
+    )
 
     # Compute cosine similarities
-    hits = util.semantic_search(query_embeddings, product_embeddings)
+    hits = util.semantic_search(
+        query_embeddings, 
+        product_embeddings
+    )
 
     # Format results
     results = []
@@ -62,7 +71,9 @@ def predict():
         result = [
             {
                 "query": queries[idx],
-                "product_description": product_descriptions[hit['corpus_id']],
+                "product_description": product_descriptions[
+                    hit['corpus_id']
+                ],
                 "score": round(hit['score'], 4),
             }
             for hit in hit_group
