@@ -46,17 +46,20 @@ def predict():
         return jsonify(
             {
                 "error": (
-                    "'queries' and 'product_descriptions' must be provided "
-                    "as lists."
+                    "'queries' and 'product_descriptions' must be provided. "    
                 )
             }
         ), 400
 
-    # Validate types
-    if not isinstance(queries, list) or not isinstance(product_descriptions, list):
+# Validate types
+    if (not isinstance(queries, list) 
+            or not isinstance(product_descriptions, list)):
         return jsonify(
-            {"error": "'query' and 'product_descriptions' \
-             must be lists."}
+            {
+                "error": (
+                    "'queries' and 'product_descriptions' must be provided as lists."
+                )
+            }
         ), 400
 
     # Encode queries and product descriptions
