@@ -36,8 +36,16 @@ def test_predict_post_valid_payload(client):
     }
     response = client.post('/predict', json=payload)
     assert response.status_code == 200
-    assert response.get_json()["queries"] == payload["queries"]
-    assert len(response.get_json()["results"]) == len(payload["product_descriptions"])
-    for result in response.get_json()["results"]:
-        assert "description" in result
-        assert "score" in result
+    data = response.get_json()
+    
+    # Validate the response structure
+    assert data["queries"] == payload["queries"]
+    assert len(data["results"]) == len(payload["queries"])
+
+    for result in data["results"]:
+        assert "query" in result
+        assert result["query"] in payload["queries"]
+        assert len(result["results"]) == len(payload["product_descriptions"])
+        for product_result in result["results"]:
+            assert "product_description" in product_result
+            assert "score" in product_result

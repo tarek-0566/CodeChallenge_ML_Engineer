@@ -66,7 +66,11 @@ def predict():
         ]
         results.append({"query": queries[i], "results": result})
 
-    return jsonify(results), 200
+    # Return response as a dictionary
+    return jsonify({
+        "queries": queries,
+        "results": results
+    }), 200
 
 
 if __name__ == '__main__':
