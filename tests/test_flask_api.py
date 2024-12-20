@@ -28,7 +28,7 @@ def test_predict_post_invalid_payload(client):
 
 def test_predict_post_valid_payload(client):
     payload = {
-        "queries": "This is a test query",
+        "queries": ["This is a test query"],
         "product_descriptions": [
             "This is the first product description",
             "Another product description"
@@ -36,7 +36,7 @@ def test_predict_post_valid_payload(client):
     }
     response = client.post('/predict', json=payload)
     assert response.status_code == 200
-    assert response.get_json()["query"] == payload["query"]
+    assert response.get_json()["queries"] == payload["queries"]
     assert len(response.get_json()["results"]) == len(payload["product_descriptions"])
     for result in response.get_json()["results"]:
         assert "description" in result

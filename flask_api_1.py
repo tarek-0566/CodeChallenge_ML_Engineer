@@ -37,7 +37,7 @@ def predict():
 
     if not queries or not product_descriptions:
         return jsonify(
-            {"error": "Queries and product descriptions are required"}
+            {"error": "Queries and product descriptions are required."}
         ), 400
 
     # Encode queries and product descriptions
