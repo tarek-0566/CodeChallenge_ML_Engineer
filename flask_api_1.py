@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify
 from sentence_transformers import SentenceTransformer, util
 
-
 # Initialize Flask app
 app = Flask(__name__)
 
@@ -23,61 +22,38 @@ def health():
     return jsonify({"status": "healthy"}), 200
 
 
-@app.errorhandler(405)
-def method_not_allowed(e):
-    return jsonify(
-        {"message": "This endpoint only supports POST requests"}
-    ), 405
-
-
 @app.route('/predict', methods=['POST'])
 def predict():
-    # Parse request data
     data = request.get_json()
     queries = data.get('queries', [])
     product_descriptions = data.get('product_descriptions', [])
 
-    # Validate inputs
-# Validate types
-    if (
-        not isinstance(queries, list)
-        or not isinstance(product_descriptions, list)
-    ):
+    if not queries or not product_descriptions:
         return jsonify(
-            {
-                "error": (
-                    "'queries' and 'product_descriptions' must be provided" 
-                    "as lists."    
-                )
-            }
+            {"error": "Queries and product descriptions are required"}
         ), 400
 
     # Encode queries and product descriptions
     query_embeddings = model.encode(
-        queries,
-        convert_to_tensor=True
+        queries, convert_to_tensor=True
     )
     product_embeddings = model.encode(
-        product_descriptions,
-        convert_to_tensor=True
+        product_descriptions, convert_to_tensor=True
     )
 
     # Compute cosine similarities
     hits = util.semantic_search(
-        query_embeddings,
-        product_embeddings
+        query_embeddings, product_embeddings
     )
 
-    # Format results
     results = []
-    for idx, hit_group in enumerate(hits):
+    for hit_group in hits:
         result = [
             {
-                "query": queries[idx],
                 "product_description": product_descriptions[
                     hit['corpus_id']
                 ],
-                "score": round(hit['score'], 4),
+                "score": round(hit['score'], 4)
             }
             for hit in hit_group
         ]
