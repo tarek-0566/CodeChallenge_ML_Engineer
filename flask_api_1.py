@@ -17,7 +17,6 @@ def method_not_allowed(e):
     ), 405
 
 
-
 @app.route('/')
 def home():
     return jsonify(
