@@ -24,11 +24,11 @@ def test_predict_get_not_allowed(client):
 def test_predict_post_invalid_payload(client):
     response = client.post('/predict', json={})
     assert response.status_code == 400
-    assert "Both 'query' and 'product_descriptions' must be provided." in response.get_json()["error"]
+    assert "Queries and product descriptions are required." in response.get_json()["error"]
 
 def test_predict_post_valid_payload(client):
     payload = {
-        "query": "This is a test query",
+        "queries": "This is a test query",
         "product_descriptions": [
             "This is the first product description",
             "Another product description"

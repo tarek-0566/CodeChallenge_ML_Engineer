@@ -10,6 +10,12 @@ model = SentenceTransformer("hkunlp/instructor-base")
 print("Model loaded successfully!")
 
 
+# Handle 405 Method Not Allowed error
+@app.errorhandler(405)
+def method_not_allowed(e):
+    return jsonify({"message": "This endpoint only supports POST requests"}), 405
+
+
 @app.route('/')
 def home():
     return jsonify(
@@ -47,7 +53,7 @@ def predict():
     )
 
     results = []
-    for hit_group in hits:
+    for i, hit_group in enumerate(hits):
         result = [
             {
                 "product_description": product_descriptions[
@@ -57,7 +63,7 @@ def predict():
             }
             for hit in hit_group
         ]
-        results.append(result)
+        results.append({"query": queries[i], "results": result})
 
     return jsonify(results), 200
 
