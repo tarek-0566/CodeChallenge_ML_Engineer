@@ -10,11 +10,12 @@ model = SentenceTransformer("hkunlp/instructor-base")
 print("Model loaded successfully!")
 
 
-# Handle 405 Method Not Allowed error
 @app.errorhandler(405)
 def method_not_allowed(e):
-    return jsonify({"message": "This endpoint only supports" 
-                    "POST requests"}), 405
+    return jsonify(
+        {"message": "This endpoint only supports POST requests"}
+    ), 405
+
 
 
 @app.route('/')
