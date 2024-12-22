@@ -1,5 +1,5 @@
 import pytest
-from flask_api_1 import app
+from flask_api import app
 
 @pytest.fixture
 def client():

@@ -4,7 +4,7 @@ from sentence_transformers import SentenceTransformer, util
 model = SentenceTransformer("./models/instructor-base")
 
 # example query
-query = ["What can I use to cut wood?", "Tell me something to measure length."]
+query = ["What can I use to cut?"]	
 
 # example product descriptions
 product_descriptions = [
@@ -20,7 +20,7 @@ query_embedding = model.encode(query)
 product_embeddings = model.encode(product_descriptions)
 
 # perform cosine similarity search
-hits = util.semantic_search(query_embedding, product_embeddings, top_k=2)
+hits = util.semantic_search(query_embedding, product_embeddings, top_k=3)
 
 # # example result
 # print(f"Query: {query}")
