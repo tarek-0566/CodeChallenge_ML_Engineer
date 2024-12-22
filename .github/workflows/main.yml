@@ -33,7 +33,7 @@ jobs:
       - name: Run flake8 for linting
         run: |
           pip install flake8
-          flake8 flask_api_1.py
+          flake8 flask_api.py
 
       # Step 5: Run tests with pytest
       - name: Run pytest for unit and integration tests
