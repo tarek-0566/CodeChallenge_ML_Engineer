@@ -15,4 +15,4 @@ COPY . .
 EXPOSE 8000
 
 # Step 6: Command to run the Flask application
-CMD ["python", "flask_api_1.py"]
+CMD ["python", "flask_api.py"]
