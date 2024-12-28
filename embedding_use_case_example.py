@@ -23,17 +23,17 @@ product_embeddings = model.encode(product_descriptions)
 hits = util.semantic_search(query_embedding, product_embeddings, top_k=3)
 
 # # example result
-# print(f"Query: {query}")
+# print(f"Query: {query}")    ## this section is giving a Name Error: name 'i' is not defined
 # for hit in hits[i]:
 #   print(f"  {corpus[hit['corpus_id']]} (Score: {round(hit['score'], 4)})")
 
-# New for loop to print all hits
-for hit in hits:
+# A New for loop is written to print all hits
+for hit_group in hits:
     results = [
         {
             "product_description": product_descriptions[hit['corpus_id']],
             "score": round(hit['score'], 4)
         }
-        for hit in hit
+        for hit in hit_group
     ]
     print(results)

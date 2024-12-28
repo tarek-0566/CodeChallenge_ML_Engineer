@@ -1,10 +1,10 @@
 from flask import Flask, request, jsonify
 from sentence_transformers import SentenceTransformer, util
 
-# Initialize Flask app
+# Initializing the Flask application
 app = Flask(__name__)
 
-# Load the SentenceTransformer model
+# Loading the SentenceTransformer model from Hugging Face
 # model = SentenceTransformer("./models/instructor-base")
 model = SentenceTransformer("hkunlp/instructor-base")
 print("Model loaded successfully!")
@@ -40,7 +40,7 @@ def predict():
             {"error": "Queries and product descriptions are required."}
         ), 400
 
-    # Encode queries and product descriptions
+    # Encoding queries and product descriptions
     query_embeddings = model.encode(
         queries, convert_to_tensor=True
     )
@@ -48,7 +48,7 @@ def predict():
         product_descriptions, convert_to_tensor=True
     )
 
-    # Compute cosine similarities
+    # Computing the cosine similarities
     hits = util.semantic_search(
         query_embeddings, product_embeddings
     )
@@ -66,7 +66,7 @@ def predict():
         ]
         results.append({"query": queries[i], "results": result})
 
-    # Return response as a dictionary
+    # Returning the response as a dictionary
     return jsonify({
         "queries": queries,
         "results": results

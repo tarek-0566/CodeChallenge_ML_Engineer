@@ -1,58 +1,199 @@
-# Take home assignment
+# CodeChallenge: Machine Learning Engineer
 
-Welcome to the nexmart take home assignment for the Machine Learning Engineer (with MLOps) role.
+## Project Overview
+This project implements a Machine Learning solution for **product similarity matching** using Sentence Transformers. The goal is to find the most similar product descriptions for a given query. The project includes:
+- A REST API for serving predictions.
+- Containerization using Docker.
+- CI/CD setup with GitHub Actions.
+- A monitoring plan for deployed model.
 
-nexMart as a company enables the digitalisation of the hardware and industrial supply sector by providing a comprehensive range of data services. To do so, a lot of external input data from producers and wholesalers needs to be ingested, transformed and delivered. One process step in this chain of operations is to handle the variety of formats and contents.
+---
 
-As the second step in the interview process, we kindly ask you to take on a coding assignment plus some related questions and submit it to us. 
-For this, you will use a basic open source encoder referenced in the repo's embedding_use_case_example.py file. The model's task is to compare product descriptions with any given amount of queries, e.g. to find similar products and return the best suiting product descriptions. You can find out more about the model under this website: https://sbert.net/.
-Your task is to deploy this model via a REST API, creating a CI/CD pipeline as well as taking care of the consequently occuring operational work. 
-With this, we are looking to test your ability of 
-1) deploying a machine learning model using containerization and
-2) automating this deployment process using CI/CD (omit any orchestration for the exercise).
-3) creating a plan for monitoring the model once it is deployed.
+## Features
+1. **Model Serving**:
+   - REST API implemented with Flask to serve predictions using Sentence Transformers.
+   - Supports semantic similarity search for product descriptions.
 
-## Instructions:
+2. **Containerization**:
+   - Dockerized API for portability and consistent deployment.
 
-- Create your own private project repo on GitHub to submit your solution once ready.
-- Check out the embedding_use_case_example.py for how we imagine to use the model and inform yourself about the model.
-- Containerize the model provided using Docker and create a working REST API for serving predictions.
-- Set up a basic CI/CD pipeline that automatically builds and tests the model deployment.
-- Write a brief explanation of what metrics you would track for the deployed model, why they are important, and how you would implement monitoring.
-- Create any other files mentioned in the delivery expectation.
-- Once you are satisfied with your solution, please give the nxcodingassignment GitHub user access to your repo and notify us (email below) about the submission.
+3. **CI/CD**:
+   - Automated pipeline with GitHub Actions to lint, test, and build Docker images.
 
+4. **Monitoring**:
+   - System metrics like system uptime, throughput, resource utilization.
+   - Similarity metrics like Average similarity of top K results or hits, similarity score distribution and similarity thresholding.
 
-## Tools Required:
+---
 
-- API: Python code & packages for API creation.
-- Docker: For containerizing the model API.
-- CI/CD Tool: OS tool like GitHub Actions or GitLab CI.
-  
+## Technologies Used
+- **Programming Language**: Python 3.9
+- **Libraries**:
+  - `sentence-transformers` for model inference.
+  - `Flask` for API creation.
+  - `Docker` for containerization.
+- **Monitoring Tools which can be used (suggestions)**:
+  - Prometheus + Grafana, mlflow
+- **CI/CD**: GitHub Actions
 
-## Delivery expectations:
+---
 
-1) Model Deployment (Containerization):
-- A working Dockerfile (and optionally docker-compose files) for containerizing the model API.
-- Source code for serving the model via the API and any tests you deem necessary.
+## Setup Instructions
 
-2) CI/CD Setup:
-- a CI/CD pipeline configuration (e.g., .github/workflows/ or .gitlab-ci.yml).
+### Clone the Repository
+To clone the repository, use the following commands:
 
-3) Monitoring Plan:
-- A clear & concise document that describes your monitoring strategy.
+```bash
+git clone https://github.com/tarek-0566/CodeChallenge_ML_Engineer.git
+cd CodeChallenge_ML_Engineer
+```
+# Flask Sentence Transformer API
 
-4) A README of the solution submitted with
-   
-   a. instructions on how to build & run your solution locally.
-   
-   b. any API & CI/CD pipeline documentation you deem useful.
-   
-   c. a few explanations on which additional code you could have written to make it a full-scale production setup with a model repository containing various model versions.
-   
-   d. anything else that you would like to let us know with regards to the assignment like explanations, additional info etc if any. (not mandatory)
+## Create a Virtual Environment
 
+```bash
+python -m venv myenv
+source myenv/bin/activate    # On Windows: myenv\Scripts\activate
+```
 
-Generally, as this is a selection process exercise, we do not not expect a full-blown solution to save the candidate’s time. That being said, it is important for us to see notions to evaluate the seniority of the candidate which means we expect code in basic production quality (not MVP standard) and minimal testing that your code works & checking the most important aspects of the task. Evaluation criteria include the compliance with the delivery expectations, logical thinking, code and documentation quality.
+## Install Dependencies
 
-Any technical questions regarding the assignment can be submitted to this email address: coding.assignment@nexmart.com. For all other questions, please refer to your recruiter contact.
+```bash
+pip install -r requirements.txt
+```
+
+## Usage
+
+### Run the Flask API
+
+Start the Flask server locally:
+
+```bash
+python flask_api.py
+```
+
+Access the endpoints:
+
+- **Health Check:** [http://localhost:8000/health](http://localhost:8000/health)
+- **Prediction:** [http://localhost:8000/predict](http://localhost:8000/predict)
+
+### Example Prediction Request
+
+```bash
+curl -X POST -H "Content-Type: application/json" -d '{
+    "query": ["What can I use to cut wood?"],
+    "product_descriptions": [
+        "Heavy-duty claw hammer with a non-slip grip handle.",
+        "High-performance circular saw with laser guide."
+    ]
+}' http://localhost:8000/predict
+```
+
+## Run with Docker
+
+### Build the Docker image:
+
+```bash
+docker build -t flask-sentence-transformer .
+```
+
+### Run the container:
+
+```bash
+docker run -p 8000:8000 flask-sentence-transformer
+```
+
+### Test the API:
+
+- Use the `/health` endpoint to ensure the service is running.
+- Send requests to `/predict` for predictions.
+
+## CI/CD Pipeline
+
+The CI/CD pipeline:
+
+- Runs on all pushes and pull requests to the main branch.
+- Steps include:
+  - **Linting:** `flake8`
+  - **Unit and integration tests:** `pytest`
+  - **Docker image build and validation**`
+
+To verify the pipeline, check the **Actions** tab in the GitHub repository.
+
+## Monitoring
+
+### System Metrics:
+
+- **System Uptime**
+- **Throughput**
+- **Latency**
+- **Resource Utilization**
+
+### Model Metrics:
+
+- **Average Similarity of Top K results/hits**
+- **Similarity Score Distribution**
+- **Similarity Threshold**
+
+## Folder Structure
+
+```bash
+CodeChallenge_ML_Engineer/
+├── flask_api.py           # Flask API implementation
+├── requirements.txt       # Python dependencies
+├── Dockerfile             # Docker configuration
+├── .github/
+│   └── workflows/
+│       └── main.yml       # CI/CD pipeline
+├── monitoring_plan.md     # Monitoring plan documentation
+├── tests/                 # Unit and integration tests
+└── README.md              # Project documentation
+```
+
+## Enhancements for Full-Scale Production Setup
+
+### **1. Model Versioning and Repository Support**
+- **Purpose**: Manage multiple model versions and allow dynamic selection.
+- **Implementation**:
+  - Store models in a versioned directory structure (e.g., `models/v1`, `models/v2`).
+  - Add an API endpoint (e.g., `/load-model`) to dynamically load models based on version.
+
+### **2. Asynchronous Processing**
+- **Purpose**: Improve throughput and responsiveness under high load.
+- **Implementation**:
+  - Use frameworks like **FastAPI** for async support.
+  - Integrate task queues (e.g., **Celery**) with a message broker (e.g., **Redis** or **RabbitMQ**) for long-running tasks.
+
+### **3. Caching for Frequently Used Results**
+- **Purpose**: Reduce redundant computations and improve performance.
+- **Implementation**:
+  - Use **Redis** or a similar caching system.
+  - Cache embeddings or query results with a TTL (time-to-live) for expiration.
+  - Check the cache before running inference.
+
+### **4. Monitoring and Logging**
+- **Purpose**: Track application health and debug effectively.
+- **Implementation**:
+  - Integrate **Prometheus** and **Grafana** for monitoring API latency, error rates, and usage metrics.
+  - Use structured logging with tools like **Loguru** to log requests, responses, and errors.
+
+### **5. Security Enhancements**
+- **Purpose**: Protect the application from unauthorized access and vulnerabilities.
+- **Implementation**:
+  - Use **API key authentication** or OAuth2 for access control.
+  - Enforce **HTTPS** for secure communication.
+  - Validate and sanitize user inputs to prevent injection attacks.
+
+### **6. Horizontal Scaling**
+- **Purpose**: Handle increased traffic by distributing load across multiple instances.
+- **Implementation**:
+  - Use **Docker** for containerization and **Kubernetes** for orchestration.
+  - Add a load balancer (e.g., **NGINX**) to distribute incoming requests across instances.
+
+### **7. Graceful Model Updates**
+- **Purpose**: Ensure uninterrupted service during model updates.
+- **Implementation**:
+  - Load new models in the background while keeping the current model active.
+  - Provide an endpoint (e.g., `/switch-model`) to switch models seamlessly after validation.
+  - Use version flags or environment variables for model selection.
+
