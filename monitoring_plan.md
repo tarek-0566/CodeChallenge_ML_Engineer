@@ -28,21 +28,21 @@
 ### **Average Similarity of Top K results/hits**
 - **Importance**: Measures how closely the top \( K \) recommendations align with the query, ensuring the model retrieves relevant results.
 - **Implementation**:
-  1. Use the Sentence Transformer to compute embeddings for queries and corpus.
-  2. Retrieve top \( K \) recommendations based on similarity scores (e.g., cosine similarity).
-  3. Calculate the average similarity score of these recommendations across all queries.
+  - Use the Sentence Transformer to compute embeddings for queries and corpus.
+  - Retrieve top \( K \) recommendations based on similarity scores (e.g., cosine similarity).
+  - Calculate the average similarity score of these recommendations across all queries.
 
 ### **Similarity Score Distribution**
 - **Importance**: Analyzes the range and consistency of similarity scores for top recommendations, ensuring reliable performance across queries.
 - **Implementation**:
-  1. Record similarity scores of the top \( K \) recommendations for all queries.
-  2. Visualize the distribution of these scores using histograms or statistical plots.
-  3. Identify anomalies or inconsistencies in the scores.
+  - Record similarity scores of the top \( K \) recommendations for all queries.
+  - Visualize the distribution of these scores using histograms or statistical plots.
+  - Identify anomalies or inconsistencies in the scores.
 
 ### **Similarity Thresholding**
 - **Importance**: Ensures recommendations meet a minimum relevance standard by setting a similarity threshold.
 - **Implementation**:
-  1. Define a similarity threshold (e.g., \( 0.7 \)).
-  2. Track the percentage of recommendations exceeding this threshold.
-  3. Monitor trends in this metric to detect degradation in model relevance (e.g., declining **ThresholdPassRate**).
+  - Define a similarity threshold (e.g., \( 0.7 \)).
+  - Track the percentage of recommendations exceeding this threshold.
+  - Monitor trends in this metric to detect degradation in model relevance (e.g., declining **ThresholdPassRate**).
 
