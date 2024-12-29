@@ -116,7 +116,7 @@ The CI/CD pipeline:
 - Steps include:
   - **Linting:** `flake8`
   - **Unit and integration tests:** `pytest`
-  - **Docker image build and validation**`
+  - **Docker image build and validation**
 
 To verify the pipeline, check the **Actions** tab in the GitHub repository.
 
