@@ -153,45 +153,42 @@ CodeChallenge_ML_Engineer/
 ## Enhancements for Full-Scale Production Setup
 
 ### **1. Model Versioning and Repository Support**
-- **Purpose**: Manage multiple model versions and allow dynamic selection.
+- **Purpose**: Managing multiple model versions and allow dynamic selection.
 - **Implementation**:
-  - Store models in a versioned directory structure (e.g., `models/v1`, `models/v2`).
-  - Add an API endpoint (e.g., `/load-model`) to dynamically load models based on version.
+  - Storing models in a versioned directory structure (e.g., `models/v1`, `models/v2`).
+  - Adding an API endpoint (e.g., `/load-model`) to dynamically load models based on version.
 
 ### **2. Asynchronous Processing**
 - **Purpose**: Improve throughput and responsiveness under high load.
 - **Implementation**:
-  - Use frameworks like **FastAPI** for async support.
-  - Integrate task queues (e.g., **Celery**) with a message broker (e.g., **Redis** or **RabbitMQ**) for long-running tasks.
+  - Using frameworks like **FastAPI** for async support.
 
 ### **3. Caching for Frequently Used Results**
 - **Purpose**: Reduce redundant computations and improve performance.
 - **Implementation**:
-  - Use **Redis** or a similar caching system.
-  - Cache embeddings or query results with a TTL (time-to-live) for expiration.
-  - Check the cache before running inference.
+  - Using a caching system.
+  - Checking the cache before running inference.
 
 ### **4. Monitoring and Logging**
-- **Purpose**: Track application health and debug effectively.
+- **Purpose**: Tracking application health and debug effectively.
 - **Implementation**:
-  - Integrate **Prometheus** and **Grafana** for monitoring API latency, error rates, and usage metrics.
-  - Use structured logging with tools like **Loguru** to log requests, responses, and errors.
+  - Integrating **Prometheus** and **Grafana** for monitoring API latency, error rates, and usage metrics.
+  - Using structured logging log requests, responses, and errors.
 
 ### **5. Security Enhancements**
-- **Purpose**: Protect the application from unauthorized access and vulnerabilities.
+- **Purpose**: Protecting the application from unauthorized access and vulnerabilities.
 - **Implementation**:
-  - Use **API key authentication** or OAuth2 for access control.
-  - Enforce **HTTPS** for secure communication.
-  - Validate and sanitize user inputs to prevent injection attacks.
+  - Using **API key authentication** or OAuth2 for access control.
+  - Enforcing **HTTPS** for secure communication.
 
 ### **6. Horizontal Scaling**
-- **Purpose**: Handle increased traffic by distributing load across multiple instances.
+- **Purpose**: Handling increased traffic by distributing load across multiple instances.
 - **Implementation**:
-  - Use **Docker** for containerization and **Kubernetes** for orchestration.
-  - Add a load balancer (e.g., **NGINX**) to distribute incoming requests across instances.
+  - Using **Docker** for containerization and **Kubernetes** for orchestration.
+  - Add a load balancer to distribute incoming requests across instances.
 
 ### **7. Graceful Model Updates**
-- **Purpose**: Ensure uninterrupted service during model updates.
+- **Purpose**: Ensuring uninterrupted service during model updates.
 - **Implementation**:
   - Load new models in the background while keeping the current model active.
   - Provide an endpoint (e.g., `/switch-model`) to switch models seamlessly after validation.
