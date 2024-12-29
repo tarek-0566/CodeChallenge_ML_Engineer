@@ -1,4 +1,4 @@
-# Metrics to Track for Deployed for Semantic Search Model
+# Metrics to Track for Deployed Semantic Search Model
 
 ## **1. System Metrics**
 
