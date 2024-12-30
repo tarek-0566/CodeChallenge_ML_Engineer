@@ -21,7 +21,7 @@ This project implements a Machine Learning solution for **product similarity mat
    - Automated pipeline with GitHub Actions to lint, test, and build Docker images.
 
 4. **Monitoring**:
-   - System metrics like system uptime, throughput, resource utilization.
+   - System metrics like system uptime, throughput, resource utilization and latency.
    - Similarity metrics like Average similarity of top K results or hits, similarity score distribution and similarity thresholding.
 
 ---
