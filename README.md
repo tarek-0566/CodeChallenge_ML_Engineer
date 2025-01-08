@@ -1,4 +1,4 @@
-# CodeChallenge: Machine Learning Engineer
+# Product Similarity Matching
 
 ## Project Overview
 This project implements a Machine Learning solution for **product similarity matching** using Sentence Transformers. The goal is to find the most similar product descriptions for a given query. The project includes:
